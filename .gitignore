@@ -1,0 +1,26 @@
+# Zephyr build outputs
+build/
+**/build/
+*.elf
+*.hex
+*.bin
+*.map
+*.obj
+*.a
+
+# Local credentials
+.env
+*.env
+secrets.h
+Zephyr_secrets.h
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

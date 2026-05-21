@@ -1,0 +1,92 @@
+#
+# Copyright (c) 2020 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+menu "LTE MQTT IoT Pipeline Example"
+
+config GNSS_ERASE
+	string "GNSS erase command"
+	default "ERASE"
+		
+config BOARD_RESET
+	string "Board reset command"
+	default "RESET"
+	
+config MQTT_PUB_TOPIC
+	string "MQTT publish topic"
+	default "devices/example-device/telemetry"
+
+config MQTT_PUB_TOPIC1
+	string "MQTT publish topic"
+	default "devices/example-device/location"
+
+config MQTT_SUB_TOPIC
+	string "MQTT subscribe topic"
+	default "devices/example-device/commands"
+
+config MQTT_CLIENT_ID
+	string "MQTT Client ID"
+	help
+	  Use a custom Client ID string. If not set, the client ID will be
+	  generated based on IMEI number (for nRF91 Series based targets) or
+	  randomly (for other platforms).
+	default ""
+
+config MQTT_BROKER_HOSTNAME
+	string "MQTT broker hostname"
+	default "mqtt.example.com"
+
+config MQTT_BROKER_PORT
+	int "MQTT broker port"
+	default 1883
+
+config MQTT_MESSAGE_BUFFER_SIZE
+	int "MQTT message buffer size"
+	default 128
+
+config MQTT_PAYLOAD_BUFFER_SIZE
+	int "MQTT payload buffer size"
+	default 128
+
+config BUTTON_EVENT_PUBLISH_MSG
+	string "The message to publish on a button event"
+	default "Hi from nRF91 Series device"
+
+config TURN_LED_ON_CMD
+	string "Command to turn on LED"
+	default "LED1ON"
+
+config TURN_LED_OFF_CMD
+	string "Command to turn off LED"
+	default "LED1OFF"
+
+config MQTT_RECONNECT_DELAY_S
+	int "Seconds to delay before attempting to reconnect to the broker."
+	default 60
+
+
+config GNSS_PERIODIC_INTERVAL
+	int "Fix interval for periodic GPS fixes"
+	range 10 65535
+	default 10
+	help
+	  Fix interval (in seconds) for periodic fixes.
+
+
+config GNSS_PERIODIC_TIMEOUT
+	int "Fix timeout for periodic GPS fixes"
+	range 0 65535
+	default 600
+	help
+	  Fix timeout (in seconds) for periodic fixes.
+	  If set to zero, GNSS is allowed to run indefinitely until a valid PVT estimate is produced.
+
+endmenu
+
+
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu

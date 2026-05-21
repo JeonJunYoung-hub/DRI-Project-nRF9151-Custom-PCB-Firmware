@@ -1,89 +1,72 @@
-# LTE-based IoT Sensor System
+# Embedded LTE MQTT IoT Pipeline
 
-An embedded-to-cloud system that collects environmental data using Nordic nRF9151 and transmits it to a cloud backend via LTE and MQTT.
+A portfolio-safe embedded-to-cloud example for collecting environmental sensor data with a Nordic nRF9151-class LTE/GNSS device and forwarding telemetry through MQTT into MongoDB.
 
----
+This repository intentionally uses placeholder broker, APN, topic, and database values. It is meant to show the architecture and implementation approach without exposing production infrastructure or private research code.
 
-## Full Documentation
+## Architecture
 
-For detailed implementation and full technical documentation:
+```text
+SEN66/BMP581 sensors -> nRF9151 firmware -> LTE-M/NB-IoT -> MQTT broker -> Python bridge -> MongoDB
+```
 
-[📄 View Full Technical Guide (Google Drive)](https://docs.google.com/document/d/1_5Lt2o4yYnwDdJkwNVkzcrS0I1ZkqhTu/edit?usp=sharing&ouid=100431925273316780165&rtpof=true&sd=true)
+## Repository Layout
 
----
+- `firmware/nrf9151_zephyr/` - Zephyr/Nordic firmware example for LTE, GNSS, sensor sampling, MQTT publishing, flash buffering, RTC scheduling, and watchdog recovery.
+- `backend/mqtt_mongodb_bridge/` - Python MQTT subscriber that normalizes telemetry and stores it in MongoDB.
+- `docs/` - high-level setup notes for the cloud and device pipeline.
+- `images/` - architecture visuals.
 
-## Overview
+## Features
 
-This project is a custom embedded system designed to collect environmental data such as PM, CO2, temperature, and humidity, and transmit it to a cloud backend in real time.
+- LTE-M/NB-IoT connectivity workflow using Nordic modem libraries
+- GNSS location acquisition before telemetry upload
+- MQTT telemetry publishing with configurable topics
+- SEN66 and BMP581 sensor integration over I2C
+- Adaptive sampling intervals based on PM2.5 levels
+- Flash buffering for recent sensor and location payloads
+- Watchdog and RTC-based scheduling for field reliability
+- MongoDB ingestion service with environment-based configuration
 
-The system integrates:
+## Privacy and Safety Notes
 
-* Embedded firmware (nRF9151)
-* LTE communication
-* GNSS positioning
-* MQTT data pipeline
-* Cloud backend (GCP + MongoDB)
+The public version removes:
 
----
+- real MongoDB credentials and cluster names
+- real MQTT broker IP addresses
+- personal names and organization-specific identifiers
+- build outputs containing local machine paths
+- private topic names and internal device labels
 
-## System Architecture
+Before using this in a real deployment, create private local config files from the examples and keep them out of Git.
 
-Sensor → nRF9151 → LTE → MQTT Broker (EMQX) → GCP → MongoDB
+## Firmware Setup
 
----
+Install Nordic Connect SDK and build from the firmware directory:
 
-## My Contributions
+```powershell
+cd firmware/nrf9151_zephyr
+west build -b nrf9151dk/nrf9151/ns -- -DCONF_FILE=prj.conf
+```
 
-* Developed embedded firmware using Nordic nRF9151
-* Implemented GNSS-based location acquisition
-* Designed LTE communication workflow
-* Built MQTT-based data transmission pipeline
-* Deployed EMQX broker on GCP VM
-* Designed MongoDB-based data storage architecture
-* Implemented adaptive sensor sampling logic
-* Designed watchdog-based system reliability
+Update `prj.conf` and a private `include/secrets.h` with your own MQTT broker, APN, and topics before deploying to hardware.
 
----
+## Backend Setup
 
-## Data Flow
+```powershell
+cd backend/mqtt_mongodb_bridge
+pip install -r requirements.txt
+$env:MONGODB_URI="<your MongoDB connection string>"
+$env:MQTT_HOST="localhost"
+python bridge.py
+```
 
-1. Sensor data is collected periodically
-2. GNSS retrieves location data
-3. Device connects to LTE network
-4. Data is formatted into JSON
-5. MQTT publishes data to EMQX broker
-6. Backend stores data in MongoDB
-<p align="center">
-  <img src="images/dataflow.png" width="700"/>
-</p>
----
+## Example MQTT Topics
 
-## Tech Stack
+- `devices/example-device/telemetry`
+- `devices/example-device/location`
+- `devices/example-device/logs`
 
-* Embedded C
-* Nordic nRF9151 (LTE + GNSS)
-* MQTT (EMQX)
-* Google Cloud Platform (VM)
-* MongoDB
+## Status
 
----
-
-## Key Features
-
-* Adaptive sampling based on PM2.5 levels
-* Power Saving Mode (PSM) optimization
-* Multithreaded architecture for measurement and transmission separation
-* Watchdog-based system reliability
-* GNSS-based location tagging
-
----
-
-## Results
-
-* Successfully built end-to-end embedded-to-cloud pipeline
-* Real-time environmental data transmission validated
-* Stable LTE and MQTT communication achieved
-
----
-
-
+This repository is a sanitized reference implementation. Hardware pin mappings, APN credentials, broker addresses, and database credentials must be supplied by the user for an actual deployment.
