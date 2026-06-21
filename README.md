@@ -10,12 +10,30 @@ This repository intentionally uses placeholder broker, APN, topic, and database 
 SEN66/BMP581 sensors -> nRF9151 firmware -> LTE-M/NB-IoT -> MQTT broker -> Python bridge -> MongoDB
 ```
 
+## Hardware Photos
+
+<p align="center">
+  <img src="docs/images/lte-gps-board-enclosure-top.jpeg" alt="LTE and GNSS board mounted inside a 3D printed enclosure" width="250" />
+  <img src="docs/images/lte-gps-board-mounted.jpeg" alt="Mounted LTE and GNSS board with antenna and power connections" width="250" />
+  <img src="docs/images/dual-fan-internal-airflow.jpeg" alt="Internal dual fan airflow layout for the sensing node" width="250" />
+</p>
+
+<p align="center">
+  <img src="docs/images/solar-powered-field-node-closeup.jpeg" alt="Solar-powered field node close-up" width="250" />
+  <img src="docs/images/solar-powered-field-node-side.jpeg" alt="Side view of the solar-powered outdoor node" width="250" />
+  <img src="docs/images/outdoor-air-quality-node-deployment.jpeg" alt="Outdoor air-quality node deployed with solar panel and louvered enclosure" width="250" />
+</p>
+
+- **LTE/GNSS electronics:** Nordic-class cellular board integrated into a 3D-printed carrier with antenna, power, and enclosure access.
+- **Airflow module:** internal dual-fan layout used to move sampled air through the sensing enclosure.
+- **Field node:** solar-powered outdoor deployment with weather-aware mounting and a louvered environmental sensor housing.
+
 ## Repository Layout
 
 - `firmware/nrf9151_zephyr/` - Zephyr/Nordic firmware example for LTE, GNSS, sensor sampling, MQTT publishing, flash buffering, RTC scheduling, and watchdog recovery.
 - `backend/mqtt_mongodb_bridge/` - Python MQTT subscriber that normalizes telemetry and stores it in MongoDB.
 - `docs/` - high-level setup notes for the cloud and device pipeline.
-- `images/` - architecture visuals.
+- `docs/images/` - architecture and hardware photos.
 
 ## Features
 
