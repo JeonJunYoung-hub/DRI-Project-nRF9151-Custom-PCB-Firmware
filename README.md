@@ -1,6 +1,22 @@
-# Embedded LTE MQTT IoT Pipeline
+# nRF9151 Custom PCB Firmware — LTE / MQTT IoT Pipeline
+
+> A **DRI** project. Firmware for a custom nRF9151 carrier board.
 
 A portfolio-safe embedded-to-cloud example for collecting environmental sensor data with a Nordic nRF9151-class LTE/GNSS device and forwarding telemetry through MQTT into MongoDB.
+
+## Interfaces used
+
+**SPI · I2C · UART · GPIO**, on a carrier PCB with an I2C multiplexer.
+
+| Bus | Instance | What is on it |
+|---|---|---|
+| I2C | `i2c1` | Sensirion **SEN66** — PM, VOC, NOx, temperature, humidity |
+| I2C | `i2c2` | Bosch **BMP581** — temperature, pressure |
+| SPI | `spi3` | GigaDevice **gd25wb256e** 256 Mbit (32 MB) NOR flash |
+| UART | `uart0` | Console / debug through the SEGGER J-Link mini |
+| GPIO | — | Status LED, plus ADC for battery sensing |
+
+GPIO port 1 is left alone: TF-M reserves it for the secure world by default.
 
 This repository intentionally uses placeholder broker, APN, topic, and database values. It is meant to show the architecture and implementation approach without exposing production infrastructure or private research code.
 
